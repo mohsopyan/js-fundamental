@@ -31,3 +31,10 @@ function isGenap(angka) {
 
 let data2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 console.log(filterDenganAturan(data2, isGenap))
+
+let data3 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+let ganjil = data3.filter(function(angka) {
+    return angka % 2 !== 0
+})
+console.log(ganjil)
