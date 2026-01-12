@@ -30,6 +30,11 @@ function validateUser(user) {
             errors
         }
     }
+
+    return {
+        valid: true,
+        data: user
+    }
 }
 
 module.exports = validateUser
