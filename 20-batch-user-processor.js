@@ -1,5 +1,5 @@
 const validateUser = require("./18-user-validation");
-const { canAccessSystem } = require("./22-access-decision");
+const { decideUserAccess } = require("./22-access-decision");
 
 function processUsers(users) {
   let validUsers = [];
@@ -10,14 +10,15 @@ function processUsers(users) {
     const result = validateUser(user);
 
     if (result.valid) {
-      const access = canAccessSystem(user);
+      const decision = decideUserAccess(user);
 
-      if (access.allowed) {
+      if (decision.status === "ALLOWED") {
         validUsers.push(user);
       } else {
         accessDeniedUsers.push({
           user,
-          reason: access.reason,
+          reason: decision.reason,
+          code: decision.code,
         });
       }
     } else {

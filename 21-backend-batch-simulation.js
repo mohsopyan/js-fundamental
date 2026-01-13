@@ -1,5 +1,6 @@
-const { canAccessSystem } = require("./22-access-decision")
+const { decideUserAccess } = require("./22-access-decision")
 const processUsers = require("./20-batch-user-processor")
+const buildBackendResponse = require("./23-response-builder")
 
 let users = [
     {name: "Andi", age: 25, active: true},
@@ -7,4 +8,6 @@ let users = [
     {name: "Budi", age: 30, active: false}
 ]
 
-console.log(processUsers(users))
+const result = processUsers(users);
+const response = buildBackendResponse(result);
+console.log(response)

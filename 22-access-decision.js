@@ -1,8 +1,9 @@
-function canAccessSystem(user) {
-  if (user.active !== true) {
+function decideUserAccess(user) {
+  if (!user.active) {
     return {
-      allowed: false,
-      reason: "User is not active",
+      status: "DENIED",
+      code: "ACCESS_INACTIVE_USER",
+      reason: "User is not active"
     };
   }
 
@@ -14,9 +15,10 @@ function canAccessSystem(user) {
   }
 
   return {
-    allowed: true,
+    status: "ALLOWED",
+    code: null,
     reason: null,
   };
 }
 
-module.exports = { canAccessSystem };
+module.exports = { decideUserAccess };
