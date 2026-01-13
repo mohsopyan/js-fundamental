@@ -1,5 +1,5 @@
 function buildResponse(result) {
-    if(result.valid === true) {
+    if(result.valid) {
         // CASE: VALID
         return {
             success: true,
@@ -10,12 +10,8 @@ function buildResponse(result) {
     // CASE: INVALID
     return {
         success: false,
-        errors: result.errors.map(err => ({
-            code: err.code,
-            message: err.message,
-            field: err.field
-        }))
-    }
+        errors: result.errors,
+    };
 }
 
 module.exports = buildResponse
