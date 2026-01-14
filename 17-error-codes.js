@@ -14,7 +14,12 @@ const ERROR_CODES = {
     INVALID_ROLE: {
         code: "INVALID_ROLE",
         message: "Invalid role"
-    }
+    },
+
+    INACTIVE_USER: {
+        code: "INACTIVE_USER",
+        message: "User is not active"
+    },
 }
 
 module.exports = ERROR_CODES
