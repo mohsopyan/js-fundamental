@@ -4,14 +4,21 @@ const { createError } = require("./25-error-factory");
 
 function ageRule(user) {
   if (typeof user.age !== "number" || user.age < 18) {
-    return createError({
-      type: ERROR_TYPES.VALIDATION,
-      ...ERROR_CODES.INVALID_AGE,
-      field: "age",
-    });
+    return {
+      passed: false,
+      error: createError({
+        type: ERROR_TYPES.VALIDATION,
+        code: ERROR_CODES.INVALID_AGE.code,
+        message: ERROR_CODES.INVALID_AGE.message,
+        field: "age",
+      }),
+    };
   }
 
-  return null;
+  return {
+    passed: true,
+    error: null,
+  };
 }
 
 module.exports = ageRule;

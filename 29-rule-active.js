@@ -4,14 +4,21 @@ const ERROR_CODES = require("./17-error-codes");
 
 function activeRule(user) {
   if (user.active !== true) {
-    return createError({
-      type: ERROR_TYPES.ACCESS,
-      ...ERROR_CODES.INACTIVE_USER,
-      field: "active",
-    });
+    return {
+      passed: false,
+      error: createError({
+        type: ERROR_TYPES.ACCESS,
+        code: ERROR_CODES.INACTIVE_USER.code,
+        message: ERROR_CODES.INACTIVE_USER.message,
+        field: "active",
+      }),
+    };
   }
 
-  return null;
+  return {
+    passed: true,
+    error: null,
+  };
 }
 
 module.exports = activeRule;

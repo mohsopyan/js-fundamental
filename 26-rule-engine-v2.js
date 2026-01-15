@@ -1,19 +1,18 @@
 function runRules(user, rules) {
-    for (let rule of rules) {
-        const error = rule(user);
+  for (let rule of rules) {
+    const result = rule(user);
 
-        if(error) {
-            return {
-                passed: false,
-                error
-            };
-        }
+    if (!result.passed) {
+      return {
+        passed: false,
+        error: result.error,
+      };
     }
-
-    return {
-        passed: true,
-        reason: null
-    }
+  }
+  return {
+    passed: true,
+    error: null,
+  };
 }
 
 module.exports = runRules;
