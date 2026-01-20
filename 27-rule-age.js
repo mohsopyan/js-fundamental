@@ -1,12 +1,14 @@
 const ERROR_CODES = require("./17-error-codes");
 const ERROR_TYPES = require("./24-error-classification");
 const { createError } = require("./25-error-factory");
+const { priority } = require("./29-rule-active");
 
 const ageRule = {
   name: "ageRule",
+  priority: 50,
   strategy: "COLLECT",
 
-  run(user) {
+  run(user,context) {
     if (typeof user.age !== "number" || user.age < 18) {
       return {
         passed: false,

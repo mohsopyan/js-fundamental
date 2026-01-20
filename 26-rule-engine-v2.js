@@ -1,20 +1,30 @@
-function runRules(user, rules, options = { mode: "FAIL_FAST" }) {
+function runRules(user, rules, context = { mode: "FAIL_FAST" }) {
   const errors = [];
 
-  for (let rule of rules) {
-    const result = rule.run(user);
+  const sortedRules = [...rules].sort((a, b) => (a.priority ?? 100 ) - (b.priority ?? 100));
+
+  for (let rule of sortedRules) {
+    const result = rule.run(user, context);
 
     if (!result.passed) {
-      const mode = rule.strategy || options.mode || "FAIL_FAST";
-
-      if (mode === "FAIL_FAST") {
+      // ACCESS ERROR -> Selalu stop
+      if (result.error.type === "ACCESS_ERROR") {
         return {
           passed: false,
           error: result.error
         };
       }
 
-      if (mode === "COLLECT") {
+      // REQUEST -> fail fast
+      if (context.mode === "FAIL_FAST") {
+        return {
+          passed: false,
+          error: result.error
+        };
+      }
+
+      // Batch -> Collect
+      if (context.mode === "BATCH") {
         errors.push(result.error);
       }
     }
@@ -23,7 +33,7 @@ function runRules(user, rules, options = { mode: "FAIL_FAST" }) {
   if (errors.length > 0) {
     return {
       passed: false,
-      errors
+      errors,
     };
   }
 

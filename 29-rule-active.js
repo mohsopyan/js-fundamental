@@ -4,6 +4,7 @@ const ERROR_CODES = require("./17-error-codes");
 
 const activeRule = {
   name: "activeRule",
+  priority: 1,
   strategy: "FAIL_FAST",
 
   run (user) {
