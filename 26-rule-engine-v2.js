@@ -1,32 +1,38 @@
-function runRules(user, rules, context = { mode: "FAIL_FAST" }) {
+const RULE_STATE = require("./rule-states");
+
+function runRules(user, rules, options = { mode: "FAIL_FAST" }) {
+  const results = {};
   const errors = [];
 
-  const sortedRules = [...rules].sort((a, b) => (a.priority ?? 100 ) - (b.priority ?? 100));
+  const sortedRules = [...rules].sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99));
 
   for (let rule of sortedRules) {
-    const result = rule.run(user, context);
+    // Dependecy check
+    if (rule.dependsOn) {
+      const blocked = rule.dependsOn.some((dep) => results[dep]?.state === RULE_STATE.FAILED);
 
-    if (!result.passed) {
-      // ACCESS ERROR -> Selalu stop
-      if (result.error.type === "ACCESS_ERROR") {
+      if (blocked) {
+        results[rule.name] = {
+          state: RULE_STATE.BLOCKED,
+          error: null,
+        };
+        continue;
+      }
+    }
+
+    const result = rule.run(user);
+    results[rule.name] = result;
+
+    if (result.state === RULE_STATE.FAILED) {
+      if (options.mode === "FAIL_FAST") {
         return {
           passed: false,
-          error: result.error
+          error: result.error,
+          results,
         };
       }
 
-      // REQUEST -> fail fast
-      if (context.mode === "FAIL_FAST") {
-        return {
-          passed: false,
-          error: result.error
-        };
-      }
-
-      // Batch -> Collect
-      if (context.mode === "BATCH") {
-        errors.push(result.error);
-      }
+      errors.push(result.error);
     }
   }
 
@@ -34,12 +40,14 @@ function runRules(user, rules, context = { mode: "FAIL_FAST" }) {
     return {
       passed: false,
       errors,
+      results,
     };
   }
 
   return {
     passed: true,
     error: null,
+    results,
   };
 }
 
