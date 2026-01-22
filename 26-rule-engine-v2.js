@@ -13,7 +13,7 @@ function runRules(user, rules, options = { mode: "FAIL_FAST" }) {
 
       if (blocked) {
         results[rule.name] = {
-          state: RULE_STATE.BLOCKED,
+          state: RULE_STATE.SKIPPED,
           error: null,
         };
         continue;

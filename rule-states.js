@@ -1,8 +1,7 @@
 const RULE_STATE = {
-    PENDING: "PENDING",
     PASSED: "PASSED",
     FAILED: "FAILED",
-    BLOCKED: "BLOCKED",
+    SKIPPED: "SKIPPED",
 };
 
 module.exports = RULE_STATE;
