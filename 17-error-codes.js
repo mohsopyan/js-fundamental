@@ -25,6 +25,11 @@ const ERROR_CODES = {
     code: "KYC_NOT_VERIFIED",
     message: "KYC is not verified",
   },
+
+  AML_NOT_CLEARED: {
+    code: "AML_NOT_CLEARED",
+    message: "AML is not cleared"
+  }
 };
 
 module.exports = ERROR_CODES;
